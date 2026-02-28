@@ -1,11 +1,11 @@
-# skill-create
+# agent-skill-sync
 
-Create and install a skill across Claude, Codex, and Gemini Antigravity.
+Cross-IDE skill creator and installer for Claude, Codex, and Gemini Antigravity.
 
 ## Usage
 
 ```bash
-/Users/cbot/dev/tools/skill-create/skill-create.py [source] [options]
+/Users/cbot/dev/tools/agent-skill-sync/skill-create.py [source] [options]
 ```
 
 ## Input modes
@@ -13,13 +13,13 @@ Create and install a skill across Claude, Codex, and Gemini Antigravity.
 From Markdown file:
 
 ```bash
-/Users/cbot/dev/tools/skill-create/skill-create.py /path/to/instructions.md
+/Users/cbot/dev/tools/agent-skill-sync/skill-create.py /path/to/instructions.md
 ```
 
 From inline text:
 
 ```bash
-/Users/cbot/dev/tools/skill-create/skill-create.py \
+/Users/cbot/dev/tools/agent-skill-sync/skill-create.py \
   --text "Your skill instructions..." \
   --name my-skill
 ```
@@ -28,20 +28,20 @@ From stdin/pipe (agent -> skill-create):
 
 ```bash
 agent "write me a deploy skill" | \
-  /Users/cbot/dev/tools/skill-create/skill-create.py --stdin --name deploy-skill
+/Users/cbot/dev/tools/agent-skill-sync/skill-create.py --stdin --name deploy-skill
 ```
 
 Copy an existing skill folder (for example from Claude) to all IDEs:
 
 ```bash
-/Users/cbot/dev/tools/skill-create/skill-create.py \
+/Users/cbot/dev/tools/agent-skill-sync/skill-create.py \
   --new ~/.claude/skills/newskill
 ```
 
 Copy and rename while installing:
 
 ```bash
-/Users/cbot/dev/tools/skill-create/skill-create.py \
+/Users/cbot/dev/tools/agent-skill-sync/skill-create.py \
   --new ~/.claude/skills/newskill \
   --name shared-newskill
 ```
@@ -49,7 +49,7 @@ Copy and rename while installing:
 Install only to Codex:
 
 ```bash
-/Users/cbot/dev/tools/skill-create/skill-create.py ./my-skill.md --only codex
+/Users/cbot/dev/tools/agent-skill-sync/skill-create.py ./my-skill.md --only codex
 ```
 
 ## Install scopes
@@ -57,13 +57,13 @@ Install only to Codex:
 Global install (default):
 
 ```bash
-/Users/cbot/dev/tools/skill-create/skill-create.py ./my-skill.md
+/Users/cbot/dev/tools/agent-skill-sync/skill-create.py ./my-skill.md
 ```
 
 Project install only:
 
 ```bash
-/Users/cbot/dev/tools/skill-create/skill-create.py ./my-skill.md \
+/Users/cbot/dev/tools/agent-skill-sync/skill-create.py ./my-skill.md \
   --project-dir /path/to/project \
   --scope project
 ```
@@ -71,7 +71,7 @@ Project install only:
 Global + project install:
 
 ```bash
-/Users/cbot/dev/tools/skill-create/skill-create.py ./my-skill.md \
+/Users/cbot/dev/tools/agent-skill-sync/skill-create.py ./my-skill.md \
   --project-dir /path/to/project \
   --scope both
 ```
@@ -79,7 +79,7 @@ Global + project install:
 Project install + guarded gitignore sync:
 
 ```bash
-/Users/cbot/dev/tools/skill-create/skill-create.py ./my-skill.md \
+/Users/cbot/dev/tools/agent-skill-sync/skill-create.py ./my-skill.md \
   --project-dir /path/to/project \
   --scope project \
   --sync-gitignore
@@ -105,7 +105,7 @@ Project install writes to:
 Add an alias to your shell config:
 
 ```bash
-alias skill-create='/Users/cbot/dev/tools/skill-create/skill-create.py'
+alias skill-create='/Users/cbot/dev/tools/agent-skill-sync/skill-create.py'
 ```
 
 Then reload shell and run:
