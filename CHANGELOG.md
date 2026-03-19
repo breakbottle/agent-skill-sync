@@ -24,4 +24,4 @@ All notable changes to this project will be documented in this file.
 - Guarded `.gitignore` sync for project installs (`--sync-gitignore`).
 
 ### Todo 
-Add support for removing skills
+Add support for removing/deleting skills
