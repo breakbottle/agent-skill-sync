@@ -22,6 +22,15 @@ All notable changes to this project will be documented in this file.
 - Project-local Antigravity install support at `.agent/skills`.
 - Optional scripts directory copy support (`--scripts`).
 - Guarded `.gitignore` sync for project installs (`--sync-gitignore`).
+- Action-based commands for full skill lifecycle:
+  - `create`
+  - `copy`
+  - `remove`
+  - `inspect`
+  - `list`
+- `--dry-run` support for previewing file writes and removals.
+- Backward-compatible legacy mode for existing create/copy usage without subcommands.
 
 ### Todo 
-Add support for removing/deleting skills
+- Add automated tests for command coverage and regression protection.
+- Add Windows support for path handling and PowerShell usage examples.

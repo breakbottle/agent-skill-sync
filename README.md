@@ -1,6 +1,6 @@
 # agent-skill-sync
 
-Cross-IDE skill creator and installer for Claude, Codex, and Gemini Antigravity.
+Cross-IDE skill creator, sync, inspection, and removal tool for Claude, Codex, and Gemini Antigravity.
 
 ## Problem Statement
 
@@ -12,7 +12,7 @@ AI-assisted coding is moving fast. We now have Claude Code, Google Gemini Antigr
 
 Many of us play the token game while trying to stay IDE-agnostic and keep momentum. I hit this directly: I was coding in Codex, ran out of tokens, and did not want to stop shipping. I had access to other tools, so I started chaining IDEs to keep moving.
 
-That challenge created `agent-skill-sync`: one simple way to create, copy, and sync skills across platforms, globally or per project, so your workflow keeps going even when one tool slows you down.
+That challenge created `agent-skill-sync`: one simple way to create, copy, inspect, and remove skills across platforms, globally or per project, so your workflow keeps going even when one tool slows you down.
 
 If this resonates, join in. More platforms are coming, and collaborative maintenance will help keep this practical and future-ready.
 
@@ -57,18 +57,30 @@ alias skill-create="$PWD/skill-create.py"
 
 Use CLI when you want explicit control from terminal scripts or manual workflows.
 
-### Input Modes
+### Commands
+
+```bash
+./skill-create.py create [source] [options]
+./skill-create.py copy <skill-folder> [options]
+./skill-create.py remove --name <skill-name> [options]
+./skill-create.py inspect --name <skill-name> [options]
+./skill-create.py list [options]
+```
+
+Legacy no-subcommand usage still works for create/copy flows.
+
+### Create Input Modes
 
 From Markdown file:
 
 ```bash
-./skill-create.py /path/to/instructions.md
+./skill-create.py create /path/to/instructions.md
 ```
 
 From inline text:
 
 ```bash
-./skill-create.py \
+./skill-create.py create \
   --text "Your skill instructions..." \
   --name my-skill
 ```
@@ -77,27 +89,50 @@ From stdin/pipe:
 
 ```bash
 agent "write me a deploy skill" | \
-./skill-create.py --stdin --name deploy-skill
+./skill-create.py create --stdin --name deploy-skill
 ```
 
 Copy an existing skill folder to selected IDEs:
 
 ```bash
-./skill-create.py --new ~/.claude/skills/newskill
+./skill-create.py copy ~/.claude/skills/newskill
 ```
 
 Copy and rename while installing:
 
 ```bash
-./skill-create.py \
-  --new ~/.claude/skills/newskill \
+./skill-create.py copy ~/.claude/skills/newskill \
   --name shared-newskill
 ```
 
 Install only to one IDE:
 
 ```bash
-./skill-create.py ./my-skill.md --only codex
+./skill-create.py create ./my-skill.md --only codex
+```
+
+Inspect where a skill exists:
+
+```bash
+./skill-create.py inspect --name my-skill --scope both --project-dir /path/to/project
+```
+
+Remove a skill from one IDE in one project:
+
+```bash
+./skill-create.py remove --name my-skill \
+  --only codex \
+  --scope project \
+  --project-dir /path/to/project
+```
+
+Preview changes without writing or deleting:
+
+```bash
+./skill-create.py remove --name my-skill \
+  --scope both \
+  --project-dir /path/to/project \
+  --dry-run
 ```
 
 ### Install Scopes
@@ -105,13 +140,13 @@ Install only to one IDE:
 Global install (default):
 
 ```bash
-./skill-create.py ./my-skill.md
+./skill-create.py create ./my-skill.md
 ```
 
 Project install only:
 
 ```bash
-./skill-create.py ./my-skill.md \
+./skill-create.py create ./my-skill.md \
   --project-dir /path/to/project \
   --scope project
 ```
@@ -119,7 +154,7 @@ Project install only:
 Global + project install:
 
 ```bash
-./skill-create.py ./my-skill.md \
+./skill-create.py create ./my-skill.md \
   --project-dir /path/to/project \
   --scope both
 ```
@@ -127,7 +162,7 @@ Global + project install:
 Project install + guarded gitignore sync:
 
 ```bash
-./skill-create.py ./my-skill.md \
+./skill-create.py create ./my-skill.md \
   --project-dir /path/to/project \
   --scope project \
   --sync-gitignore
@@ -146,17 +181,13 @@ Project installs write to:
 - `--scripts <dir>`: copy scripts into each installed skill
 - `--only claude codex gemini`: restrict install targets
 - `--home <dir>`: override home directory for global installs
+- `--dry-run`: preview target paths and actions without writing or deleting files
 - `--sync-gitignore`: add IDE folders to `.gitignore` only under guarded conditions
 
 ### Full Option Reference
 
 ```text
-usage: skill-create.py [-h] [--new NEW] [--text TEXT] [--stdin] [--name NAME]
-                       [--description DESCRIPTION] [--scripts SCRIPTS]
-                       [--only {claude,codex,gemini} [{claude,codex,gemini} ...]]
-                       [--home HOME] [--project-dir PROJECT_DIR]
-                       [--scope {global,project,both}] [--sync-gitignore]
-                       [source]
+usage: skill-create.py [-h] {create,copy,remove,inspect,list} ...
 ```
 
 ### 2) Use Through an AI Agent
@@ -165,7 +196,7 @@ Use this when you want an assistant (Codex/Claude/Gemini agent) to handle skill 
 
 Flow:
 1. Give the agent access to this repository folder.
-2. Ask it to run `skill-create.py` with your chosen input mode and target params.
+2. Ask it to run `skill-create.py` with your chosen command and target params.
 3. Provide either a skill file path, inline prompt text, or stdin content.
 
 Prompt examples:
@@ -180,6 +211,11 @@ Use /path/to/agent-skill-sync and create a skill named api-release from this pro
 Install globally to codex only.
 ```
 
+```text
+Use /path/to/agent-skill-sync and remove the skill named api-release
+from codex only in project /path/to/repo, but dry-run first.
+```
+
 ## Contributing
 
 Contributions are welcome, especially for support of new AI coding platforms and cross-IDE skill conventions. See [CONTRIBUTING.md](CONTRIBUTING.md) for contribution workflow, bug reports, and feature requests.
@@ -191,8 +227,7 @@ MIT. See [LICENSE](LICENSE).
 ## Roadmap
 
 - Add Windows support (PowerShell examples + path handling).
-- Add remote registry publish flow for GitHub `breakbottle`.
 - Add support for additional AI IDE/platform skill directory conventions as they emerge.
 - Add automated tests for input modes, scope behavior, and `.gitignore` sync guards.
 - Add CI to run tests/lint on macOS, Linux, and Windows.
-- Add `--dry-run` mode to preview install targets and file changes before writing.
+- Add optional interactive confirmation for destructive removal outside `--dry-run`.
