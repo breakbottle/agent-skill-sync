@@ -22,3 +22,6 @@ All notable changes to this project will be documented in this file.
 - Project-local Antigravity install support at `.agent/skills`.
 - Optional scripts directory copy support (`--scripts`).
 - Guarded `.gitignore` sync for project installs (`--sync-gitignore`).
+
+### Todo 
+Add support for removing skills
