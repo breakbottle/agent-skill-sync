@@ -30,7 +30,8 @@ All notable changes to this project will be documented in this file.
   - `list`
 - `--dry-run` support for previewing file writes and removals.
 - Backward-compatible legacy mode for existing create/copy usage without subcommands.
+- Lightweight smoke test script for core CLI regression coverage.
 
 ### Todo 
-- Add automated tests for command coverage and regression protection.
 - Add Windows support for path handling and PowerShell usage examples.
+- Add CI wiring to run the smoke test automatically.

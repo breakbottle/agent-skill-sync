@@ -220,6 +220,14 @@ from codex only in project /path/to/repo, but dry-run first.
 
 Contributions are welcome, especially for support of new AI coding platforms and cross-IDE skill conventions. See [CONTRIBUTING.md](CONTRIBUTING.md) for contribution workflow, bug reports, and feature requests.
 
+## Validation
+
+Run the lightweight smoke test before pushing CLI changes:
+
+```bash
+./scripts/smoke-test.sh
+```
+
 ## License
 
 MIT. See [LICENSE](LICENSE).
